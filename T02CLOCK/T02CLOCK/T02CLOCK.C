@@ -12,7 +12,7 @@
 #pragma warning(disable: 4244)
 
 #define WND_CLASS_NAME "My window class"
-#define PI       3.14159265358979323846
+#define PI 3.14159265358979323846
 
 /*defenition*/
 LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
@@ -27,7 +27,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR* CmdLine,
   wc.style = CS_VREDRAW | CS_HREDRAW;
   wc.cbClsExtra = 0;
   wc.cbWndExtra = 0;
-  wc.hbrBackground = (HBRUSH) COLOR_WINDOW;
+  wc.hbrBackground = GetStockObject(WHITE_BRUSH);
   wc.hCursor = LoadCursor(NULL, IDC_CROSS);
   wc.hIcon = LoadIcon(NULL, IDI_ASTERISK);
   wc.lpszMenuName = NULL;
@@ -68,8 +68,8 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
   const INT sr = 7;
   const INT mr = 80;
   static INT w, h;
-  static INT rndConst = 0, secR, minR, hR;
-  static F
+  static INT rndConst = 0;
+  static FLOAT secR, sec1, minR, hR;
   static HDC hMemDC, hMemDCLogo;
   static HBITMAP hBm = NULL, hBmAnd, hBmXor;
   static SYSTEMTIME st;
@@ -105,8 +105,12 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     ReleaseDC(hWnd, hDC);
     SetTimer(hWnd, 23, 30, NULL);
 
+    SetBkMode(hMemDCLogo, RGB(200, 200, 200));
+    GetLocalTime(&st);
+    sec1 = st.wSecond;
     hBmAnd = LoadImage(NULL, "fu.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
     hBmXor = LoadImage(NULL, "fuXOR.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+    SelectObject(hMemDC, (WHITE_BRUSH));
     Rectangle(hMemDC, 0, 0, w - 1, h - 1);
     SelectObject(hMemDCLogo, hBmAnd);
     GetObject(hBmAnd, sizeof(BITMAP), &bm);
@@ -116,9 +120,26 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     break;
   case WM_TIMER:
     GetLocalTime(&st);
-    secR = st.wSecond / 30 * PI;
+    secR = (st.wSecond - sec1) / 30 * PI;
+    sec1 = st.wSecond;
 
 
+    p[0].x = w / 2 + (cos(secR) * (pts[0].x - w / 2) - sin(secR) * (pts[0].y - h / 2));
+    p[0].y = h / 2 + (sin(secR) * (pts[0].x - w / 2) + cos(secR) * (pts[0].y - h / 2));
+    p[1].x = w / 2 + (cos(secR) * (pts[1].x - w / 2) - sin(secR) * (pts[1].y - h / 2));
+    p[1].y = h / 2 + (sin(secR) * (pts[1].x - w / 2) + cos(secR) * (pts[1].y - h / 2));
+    p[2].x = w / 2 + (sin(secR) * (pts[2].x - w / 2) - cos(secR) * (pts[2].y - h / 2));
+    p[2].y = h / 2 + (cos(secR) * (pts[2].x - w / 2) + sin(secR) * (pts[2].y - h / 2));
+    p[3].x = w / 2 + (cos(secR) * (pts[3].x - w / 2) - sin(secR) * (pts[3].y - h / 2));
+    p[3].y = h / 2 + (sin(secR) * (pts[3].x - w / 2) + cos(secR) * (pts[3].y - h / 2));
+
+    for (i = 0; i < 4; i++)
+    {
+      pts[i] = p[i];
+    }
+
+    /*old version*/
+    /*
     p[0].x = w / 2 - mr * sin(secR);
     p[0].y = h / 2 + mr * cos(secR);
     p[1].x = w / 2 + sr * cos(secR);
@@ -127,8 +148,8 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     p[2].y = h / 2 - sr * cos(secR);
     p[3].x = w / 2 - sr * cos(secR);
     p[3].y = h / 2 - sr * sin(secR);
+    */
 
-    Rectangle(hMemDC, 0, 0, w - 1, h - 1);
     SelectObject(hMemDCLogo, hBmAnd);
     GetObject(hBmAnd, sizeof(BITMAP), &bm);
 
@@ -136,7 +157,6 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
 
     SelectObject(hMemDC, GetStockObject(BLACK_BRUSH));
     Polygon(hMemDC, p, 4);
-    SelectObject(hMemDC, GetStockObject(NULL_BRUSH));
 
     InvalidateRect(hWnd, NULL, FALSE);
     UpdateWindow(hWnd);
