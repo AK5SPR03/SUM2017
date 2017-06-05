@@ -44,7 +44,7 @@ void PrintPerm( void )
 /* ! RECURSIVE ! */
 void Go( int pos )
 {
-  int i;
+  int i, tmp, saveParity;;
 
   if (pos >= n)
   {
@@ -52,16 +52,22 @@ void Go( int pos )
     return;
   }
 
-  for (i = pos; i <n; i++)
+  Go(pos + 1);
+  saveParity = parity;
+  for (i = pos + 1; i <n; i++)
   {
     swap(&p[pos], &p[i]);
-    if (i != pos)
-      parity = !parity;
+    parity = !parity;
     Go(pos + 1);
-    swap(&p[pos], &p[i]);
-    if (i != pos)
-      parity = !parity;
+    
   }
+
+  tmp = p[pos];
+  for (i = pos + 1; i <n; i++)
+    p[i - 1] = p[i];
+  p[n - 1] = tmp;
+  parity = saveParity;
+
 }/* End of Go */
 
 /* function main */
