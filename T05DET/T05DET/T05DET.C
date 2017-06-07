@@ -6,15 +6,16 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <math.h>
 
-#define max 42
-#define mtrMax 42
+#define max 37
+#define mtrMax 37
 
 #pragma warning(disable: 4244)
 
 int p[max];
-int n, parity = 0;
-double m[mtrMax][mtrMax], det = 0;
+int n, parity = 0, sign = 1;
+double m[mtrMax][mtrMax], determ;
 
 /* function swap */
 void swap( int* a, int* b )
@@ -24,18 +25,78 @@ void swap( int* a, int* b )
   *b = tmp;
 }/* End of swap */
 
+/* function fswap */
+void fswap( double* a, double* b )
+{
+  double tmp = *a;
+  *a = *b;
+  *b = tmp;
+}/* End of fswap */
+
+/* function GaussMethod */
+double GaussMethod( void )
+{
+  int i, j, k, max_i, max_j;
+  double det = 1;
+
+  for (i = 0; i < n; i++)
+  {             //start for 
+    
+    /* search maximum */
+    max_i = i;
+    max_j = i;
+    for (j = i; j < n; j++)
+      for (k = i; k < n; k++)
+        if (fabs(m[max_i][max_j]) < fabs(m[j][k]))
+        {
+          max_i = j; 
+          max_j = k;
+        }
+
+    /* swapping */
+    if (max_i != i)
+    {
+      sign *= -1;
+      for (j = i; j < n; j++)
+        fswap(&m[max_i][j], &m[i][j]);
+    }
+    if (max_j != i)
+    {
+      sign *= -1;
+      for (j = i; j < n; j++)
+        fswap(&m[j][max_j], &m[j][i]);
+    }
+
+    for (k = i + 1; k < n; k++)
+    {
+      double coef = m[k][i] / m[i][i];
+
+      for (j = i; j < n; j++)
+        m[k][j] -= m[i][j] * coef;
+    }
+  }              //end for
+
+  for (i = 0; i < n; i++)
+    det *= m[i][i];
+  det *= sign;
+  return det;
+  
+}
+/* End of GaussMethod */
+
 /* function Go */
-/* ! RECURSIVE ! */
+/* !RECURSIVE! */
 void Go( int pos )
 {
   int i, saveParity;
   double tmp = 1;
 
+
   if (pos >= n)
   {
     for (i = 0; i < n; i++)
       tmp *= m[i][p[i]];
-    det+= !parity ? tmp : -tmp;
+    determ+= !parity ? tmp : -tmp;
     return;
   }
 
@@ -58,61 +119,73 @@ void Go( int pos )
 
 }/* End of Go */
 
+/* DefDeterm function */
+double DefDeterm( void )
+{
+  int i;
+
+  determ =  0;
+
+  for (i = 0; i < n; i++)
+    p[i] = i;
+  Go(0);
+  return determ;
+}
+/* End of DefDeterm */
+
 /* function MatrixLoad */
-void MatrixLoad(char* FileName)
+void MatrixLoad( char* FileName )
 {
   int i, j;
-  FILE* mF;
+  FILE* F;
 
-  mF = fopen(FileName, "r");
+  F = fopen(FileName, "r");
 
-  if (mF == NULL)
+  if (F == NULL)
   {
     printf("ERROR cannot open file\n");
     return;
   }
 
-  fscanf(mF, "%d", &n);
+  fscanf(F, "%d", &n);
 
   if (n > mtrMax)
     n = mtrMax;
 
   for (i = 0; i < n; i++)
     for (j = 0; j < n; j++)
-      fscanf(mF, "%lf", &m[i][j]);
+      fscanf(F, "%lf", &m[i][j]);
 
-  fclose(mF);
+  fclose(F);
 }
 /* End of MatrixLoad */
 
 /* function main */
 void main( void )
 {
-  int i;
-  float t;
-  FILE* mF;
+  int t;
+  FILE* F;
 
   MatrixLoad("Matrix.txt");
 
-  mF = fopen("Matrix.txt", "a");
-  if (mF == NULL)
+  F = fopen("Matrix.txt", "a");
+  if (F == NULL)
   {
     printf("ERROR cannot open file\n");
     return;
   }
-  
-  for (i = 0; i < n; i++)
-    p[i] = i;
 
   t = clock();
-  Go(0);
+  //fprintf(F ,"DeterminatorDEF  : %f\n", DefDeterm());
   t = clock() - t;
-  t = t / CLOCKS_PER_SEC;
+  fprintf(F ,"Def time:   %.15f\n", t / CLOCKS_PER_SEC);
 
+   t = clock();
+  fprintf(F ,"DeterminatorGAUSS: %f\n", GaussMethod());
+  t = clock() - t;
+  fprintf(F ,"Gauss time: %.15f\n", t / CLOCKS_PER_SEC);
 
-  fprintf(mF ,"Determinator: %lf\n", det);
-
-  fclose(mF);
+  fclose(F);
 
 }/* End of main */
 
