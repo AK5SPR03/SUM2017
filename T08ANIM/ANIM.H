@@ -8,17 +8,22 @@
 #define ANIM_H
 
 #include "Def.h"
+#include "Render.h"
 
 #define AK5_MAX_UNITS 50
+
+
+
+
+
+typedef struct tagak5ANIM ak5ANIM;
+typedef struct tagak5UNIT ak5UNIT;
 
 #define AK5_UNIT_BASE_FIELDS \
   VOID (*Init) (ak5UNIT *Uni, ak5ANIM *Ani); \
   VOID (*Close) (ak5UNIT *Uni, ak5ANIM *Ani); \
   VOID (*Response) (ak5UNIT *Uni, ak5ANIM *Ani); \
   VOID (*Render) (ak5UNIT *Uni, ak5ANIM *Ani);
-
-typedef struct tagak5ANIM ak5ANIM;
-typedef struct tagak5UNIT ak5UNIT;
 
 extern ak5ANIM AK5_Anim;
 extern INT AK5_MouseWheel;

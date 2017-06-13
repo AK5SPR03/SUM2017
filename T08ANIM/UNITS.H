@@ -9,6 +9,12 @@
 
 #include "Def.h"
 
+#include "Anim.h"
+
+
+ak5UNIT * AK5_UnitCreateCow( VOID );
+ak5UNIT * AK5_UnitCreateControl( VOID );
+ak5UNIT * AK5_AnimUnitCreate( INT Size );
 #endif
 
 /* EOF 'UNITS.H' */

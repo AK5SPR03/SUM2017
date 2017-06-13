@@ -43,10 +43,17 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR* CmdLine,
 
   ShowWindow(hWnd, SW_NORMAL);
 
-  while (GetMessage(&msg, NULL, 0, 0))
+  while (TRUE)
   {
-    TranslateMessage(&msg);
-    DispatchMessage(&msg);
+    if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+    {
+      if (msg.message == WM_QUIT)
+        break;
+      TranslateMessage(&msg);
+      DispatchMessage(&msg);
+    }
+    else
+      SendMessage(hWnd, WM_TIMER, 239, 0);
   }
   return msg.wParam;
 } /* End of WinMain */
@@ -80,7 +87,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     break;
   case WM_CREATE:
     AK5_AnimInit(hWnd);
-    SetTimer(hWnd, 239, 30, NULL);
+    SetTimer(hWnd, 239, 1, NULL);
     break;
   case WM_TIMER:
     AK5_AnimRender();    

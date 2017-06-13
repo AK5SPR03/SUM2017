@@ -28,6 +28,8 @@ typedef __int64 INT64;
 typedef unsigned __int64 UINT64;
 
 
+
+
 #endif /* __DEF_H_ */
 
 /* END OF 'DEF.H' FILE */

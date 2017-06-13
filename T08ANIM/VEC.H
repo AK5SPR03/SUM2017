@@ -34,6 +34,11 @@ __inline VEC VecSet( DBL x, DBL y, DBL z )
   return v;
 }
 
+__inline VEC VecSet1( DBL x )
+{
+  return VecSet(x, x, x);
+}
+
 __inline VEC VecAddVec( VEC v1, VEC v2 )
 {
   return VecSet(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
@@ -86,7 +91,7 @@ __inline DBL VecLen2( VEC v )
 
 __inline DBL VecLen( VEC v )
 {
-  return sqrt(VecLen(v));
+  return sqrt(VecLen2(v));
 }
 
 __inline VEC VecNormalize( VEC v )
@@ -239,10 +244,10 @@ __inline MATR MatrRotateY( DBL AngleInDegree )
   return m;
 }
 
-__inline VEC VecMulMatr( VEC v, MATR m )
-{
-
-}
+//__inline VEC VecMulMatr( VEC v, MATR m )
+//{
+//
+//}
 
 
 

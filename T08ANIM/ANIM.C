@@ -5,6 +5,7 @@
  */
 
 #include "Anim.h"
+#include "Units.h"
 #include <mmsystem.h>
 
 #pragma comment(lib, "winmm")
@@ -43,7 +44,8 @@ VOID AK5_AnimInit( HWND hWnd )
 
   AK5_Anim.IsPause = FALSE;
   AK5_Anim.FPS = 50;
-
+  AK5_AnimAddUnit(AK5_UnitCreateControl());
+  AK5_RndInit();
 
 }
 
@@ -79,6 +81,7 @@ VOID AK5_AnimResize( INT w, INT h )
   ReleaseDC(AK5_Anim.hWnd, hDC);
 
   SelectObject(AK5_Anim.hDC, AK5_Anim.hFrame);
+  AK5_RndSetProj();
 }
 
 VOID AK5_AnimCopyFrame( HDC hDC )
@@ -94,17 +97,20 @@ VOID AK5_AnimRender( VOID )
 
   for (i = 0; i < AK5_Anim.NumOfUnits; i++)
     AK5_Anim.Units[i]->Response(AK5_Anim.Units[i], &AK5_Anim);
-  SelectObject(AK5_Anim.hDC, GetStockObject(NULL_PEN));
+  SelectObject(AK5_Anim.hDC, GetStockObject(DC_PEN));
   SelectObject(AK5_Anim.hDC, GetStockObject(DC_BRUSH));
   SetDCBrushColor(AK5_Anim.hDC, RGB(0, 255, 255));
+  SetDCPenColor(AK5_Anim.hDC, RGB(255, 0, 0));
   Rectangle(AK5_Anim.hDC, 0, 0, AK5_Anim.W + 1, AK5_Anim.H + 1);
 
+  Rectangle(AK5_Anim.hDC, 0, 0, AK5_Anim.W + 1, AK5_Anim.H + 1);
   for (i = 0; i < AK5_Anim.NumOfUnits; i++)
   {
-    SelectObject(AK5_Anim.hDC, GetStockObject(NULL_BRUSH));
+    SelectObject(AK5_Anim.hDC, GetStockObject(DC_BRUSH));
     SelectObject(AK5_Anim.hDC, GetStockObject(DC_PEN));
     SetDCBrushColor(AK5_Anim.hDC, RGB(0, 255, 255));
-    Rectangle(AK5_Anim.hDC, 0, 0, AK5_Anim.W + 1, AK5_Anim.H + 1);
+    SetDCPenColor(AK5_Anim.hDC, RGB(255, 0, 0));;
+    
 
     AK5_Anim.Units[i]->Render(AK5_Anim.Units[i], &AK5_Anim);
   }
