@@ -65,7 +65,7 @@ static VOID AK5_UnitResponse( ak5UNIT_COW *Uni, ak5ANIM *Ani )
  */
 static VOID AK5_UnitRender( ak5UNIT_COW *Uni, ak5ANIM *Ani )
 {
-  AK5_RndObjDraw(&Uni->Cow, MatrRotateY(Ani->Time * 102));
+  AK5_RndObjDraw(&Uni->Cow, MatrMulMatr(MatrRotateY(Ani->Time * 102), MatrTranslate(VecSet1((DBL)Ani->Mz / 100))));
 } /* End of 'AK5_UnitRender' function */
 
 /* Cow drawing unit creation function.

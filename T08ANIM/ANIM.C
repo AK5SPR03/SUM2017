@@ -99,7 +99,7 @@ VOID AK5_AnimRender( VOID )
     AK5_Anim.Units[i]->Response(AK5_Anim.Units[i], &AK5_Anim);
   SelectObject(AK5_Anim.hDC, GetStockObject(DC_PEN));
   SelectObject(AK5_Anim.hDC, GetStockObject(DC_BRUSH));
-  SetDCBrushColor(AK5_Anim.hDC, RGB(0, 255, 255));
+  SetDCBrushColor(AK5_Anim.hDC, RGB(10, 40, 20));
   SetDCPenColor(AK5_Anim.hDC, RGB(255, 0, 0));
   Rectangle(AK5_Anim.hDC, 0, 0, AK5_Anim.W + 1, AK5_Anim.H + 1);
 
@@ -109,7 +109,7 @@ VOID AK5_AnimRender( VOID )
     SelectObject(AK5_Anim.hDC, GetStockObject(DC_BRUSH));
     SelectObject(AK5_Anim.hDC, GetStockObject(DC_PEN));
     SetDCBrushColor(AK5_Anim.hDC, RGB(0, 255, 255));
-    SetDCPenColor(AK5_Anim.hDC, RGB(255, 0, 0));;
+    SetDCPenColor(AK5_Anim.hDC, RGB(0, 250, 100));;
     
 
     AK5_Anim.Units[i]->Render(AK5_Anim.Units[i], &AK5_Anim);

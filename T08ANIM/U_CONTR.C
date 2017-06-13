@@ -81,7 +81,7 @@ static VOID AK5_UnitRender( ak5UNIT_CONTROL *Uni, ak5ANIM *Ani )
   static CHAR Buf[100];
 
   len = sprintf(Buf, "FPS: %.5f, Units: %d, Wheel: %d"
-    "J: %.3f %.3f %.3f %.3f",
+    ", J: %.3f %.3f %.3f %.3f",
     Ani->FPS, Ani->NumOfUnits, Ani->Mz,
     Ani->Jx, Ani->Jy, Ani->Jz, Ani->Jr);
 

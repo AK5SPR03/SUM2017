@@ -125,10 +125,6 @@ VOID AK5_RndObjDraw( ak5OBJ3D *Obj, MATR M )
   }
 
   /* Draw all facets */
-    SelectObject(AK5_Anim.hDC, GetStockObject(DC_BRUSH));
-    SelectObject(AK5_Anim.hDC, GetStockObject(DC_PEN));
-    SetDCBrushColor(AK5_Anim.hDC, RGB(0, 255, 255));
-    SetDCPenColor(AK5_Anim.hDC, RGB(255, 0, 0));;
   for (i = 0; i < Obj->NumOfF; i++)
   {
     POINT *p = &pts[Obj->F[i][0]];

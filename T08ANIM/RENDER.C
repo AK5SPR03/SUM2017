@@ -27,7 +27,7 @@ VOID AK5_RndInit( VOID )
   AK5_RndProjDist = 1;
   AK5_RndProjSize = 1;
 
-  AK5_RndMatrView = MatrView(VecSet1(23), VecSet1(6), VecSet(0, 1, 0));
+  AK5_RndMatrView = MatrView(VecSet1(11), VecSet1(10), VecSet(0, 1, 0));
 } /* End of 'AK5_RndInit' function */
 
 /* Project parameters adjust function.
