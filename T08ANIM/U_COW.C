@@ -11,11 +11,7 @@
 #include "units.h"
 
 /* Animation unit representation type */
-typedef struct tagak5UNIT_COW
-{
-  AK5_UNIT_BASE_FIELDS
-  ak5OBJ3D Cow; /* Cow model */
-} ak5UNIT_COW;
+
 
 /* Cow drawing unit initialization function.
  * ARGUMENTS:
@@ -64,8 +60,12 @@ static VOID AK5_UnitResponse( ak5UNIT_COW *Uni, ak5ANIM *Ani )
  * RETURNS: None.
  */
 static VOID AK5_UnitRender( ak5UNIT_COW *Uni, ak5ANIM *Ani )
-{
-  AK5_RndObjDraw(&Uni->Cow, MatrMulMatr(MatrRotateY(Ani->Time * 102), MatrTranslate(VecSet1((DBL)Ani->Mz / 100))));
+{ 
+  if (Uni->rot.x == 1 && Uni->rot.y == 1 && Uni->rot.z == 1) 
+    Uni->rot = VecSet(rand() % 5, rand() % 5, rand() % 5);
+  if (Uni->pos.x == 1 && Uni->pos.y == 1 && Uni->pos.z == 1) 
+    Uni->pos = VecSet(rand() % 40 - 20, rand() % 20 - 10, rand() % 20 - 10);
+  AK5_RndObjDraw(&Uni->Cow, MatrMulMatr(MatrRotate(Ani->Time * 102, Uni->rot), MatrTranslate(VecSet1((DBL)Ani->Mz / 500))));
 } /* End of 'AK5_UnitRender' function */
 
 /* Cow drawing unit creation function.
@@ -76,10 +76,12 @@ static VOID AK5_UnitRender( ak5UNIT_COW *Uni, ak5ANIM *Ani )
 ak5UNIT * AK5_UnitCreateCow( VOID )
 {
   ak5UNIT_COW *Uni;
-
   /* Memory allocation */
   if ((Uni = (ak5UNIT_COW *)AK5_AnimUnitCreate(sizeof(ak5UNIT_COW))) == NULL)
     return NULL;
+  
+  Uni->pos = VecSet1(1);
+  Uni->rot = VecSet1(1);
   /* Setup unit methods */
   Uni->Init = (VOID *)AK5_UnitInit;
   Uni->Close = (VOID *)AK5_UnitClose;

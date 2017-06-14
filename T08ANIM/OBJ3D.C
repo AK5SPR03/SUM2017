@@ -106,22 +106,19 @@ VOID AK5_RndObjDraw( ak5OBJ3D *Obj, MATR M )
 {
   INT i;
   POINT *pts;
+  MATR WVP = MatrMulMatr(M, MatrMulMatr(AK5_RndMatrView, AK5_RndMatrProj));
 
   if ((pts = malloc(sizeof(POINT) * Obj->NumOfV)) == NULL)
     return;
 
-  M = MatrMulMatr(M, AK5_RndMatrView);
 
   /* Project all points */
   for (i = 0; i < Obj->NumOfV; i++)
   {
-    VEC p = PointTransform(Obj->V[i], M);
-    DBL
-      xp = p.x * AK5_RndProjDist / -p.z,
-      yp = p.y * AK5_RndProjDist / -p.z;
+    VEC pp = PointTransform(Obj->V[i], WVP);
 
-    pts[i].x = AK5_Anim.W / 2 + xp * AK5_Anim.W / AK5_RndWp;
-    pts[i].y = AK5_Anim.H / 2 - yp * AK5_Anim.H / AK5_RndHp;
+    pts[i].x = AK5_Anim.W / 2 * (pp.x + 1);
+    pts[i].y = AK5_Anim.H / 2 * (-pp.y + 1);
   }
 
   /* Draw all facets */

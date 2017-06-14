@@ -55,6 +55,7 @@ static VOID AK5_UnitClose( ak5UNIT_CONTROL *Uni, ak5ANIM *Ani )
  */
 static VOID AK5_UnitResponse( ak5UNIT_CONTROL *Uni, ak5ANIM *Ani )
 {
+  INT cowCounter = 0;
 
   if (Ani->KeysClick[VK_ESCAPE])
     AK5_AnimDoExit();
@@ -63,7 +64,9 @@ static VOID AK5_UnitResponse( ak5UNIT_CONTROL *Uni, ak5ANIM *Ani )
   else if (Ani->KeysClick['P'])
     AK5_Anim.IsPause = !AK5_Anim.IsPause;
   else if (Ani->KeysClick['C'])
+  {
     AK5_AnimAddUnit(AK5_UnitCreateCow());
+  }
 } /* End of 'AK5_UnitResponse' function */
 
 /* Control unit render function.

@@ -11,12 +11,12 @@
 
 /* Project parameters */
 extern DBL
-  AK5_RndWp,       /* Project plane width */
-  AK5_RndHp,       /* Project plane height */
+  AK5_RndProjFarClip,
   AK5_RndProjDist, /* Distance from viewer to project plane */
   AK5_RndProjSize; /* Prohect plane inner size */
 
 extern MATR
+  AK5_RndMatrProj,  
   AK5_RndMatrView; /* Viewer matrix */
 
 /* Rendering system initialization function.

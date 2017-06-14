@@ -11,6 +11,13 @@
 
 #include "Anim.h"
 
+typedef struct tagak5UNIT_COW
+{
+  AK5_UNIT_BASE_FIELDS
+  ak5OBJ3D Cow; /* Cow model */
+  VEC pos, rot;
+} ak5UNIT_COW;
+
 
 ak5UNIT * AK5_UnitCreateCow( VOID );
 ak5UNIT * AK5_UnitCreateControl( VOID );

@@ -8,13 +8,13 @@
 
 /* Project parameters */
 DBL
-  AK5_RndWp,       /* Project plane width */
-  AK5_RndHp,       /* Project plane height */
+  AK5_RndProjFarClip,
   AK5_RndProjDist, /* Distance from viewer to project plane */
   AK5_RndProjSize; /* Prohect plane inner size */
 
 MATR
-  AK5_RndMatrView; /* Viewer matrix */
+  AK5_RndMatrView,  /* Viewer matrix */
+  AK5_RndMatrProj;
 
 /* Rendering system initialization function.
  * ARGUMENTS: None.
@@ -22,12 +22,11 @@ MATR
  */
 VOID AK5_RndInit( VOID )
 {
-  AK5_RndWp = 1;
-  AK5_RndHp = 1;
+  AK5_RndProjFarClip = 1000;
   AK5_RndProjDist = 1;
   AK5_RndProjSize = 1;
 
-  AK5_RndMatrView = MatrView(VecSet1(11), VecSet1(10), VecSet(0, 1, 0));
+  AK5_RndMatrView = MatrView(VecSet1(23), VecSet1(0), VecSet(0, 1, 0));
 } /* End of 'AK5_RndInit' function */
 
 /* Project parameters adjust function.
@@ -36,12 +35,12 @@ VOID AK5_RndInit( VOID )
  */
 VOID AK5_RndSetProj( VOID )
 {
-  AK5_RndWp = AK5_RndProjSize;
-  AK5_RndHp = AK5_RndProjSize;
+  DBL rx = AK5_RndProjSize / 2, ry = AK5_RndProjSize / 2;
   if (AK5_Anim.W > AK5_Anim.H)
-    AK5_RndWp *= (DBL)AK5_Anim.W / AK5_Anim.H;
+    rx *= (DBL)AK5_Anim.W / AK5_Anim.H;
   else
-    AK5_RndHp *= (DBL)AK5_Anim.H / AK5_Anim.W;
+    ry *= (DBL)AK5_Anim.H / AK5_Anim.W;
+  AK5_RndMatrProj = MatrFrustum(-rx, rx, -ry, ry, AK5_RndProjDist, AK5_RndProjFarClip);
 } /* End of 'AK5_RndSetProj' function */
 
 /* END OF 'RENDER.C' FILE */

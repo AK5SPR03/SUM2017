@@ -170,7 +170,7 @@ __inline MATR MatrInverse( MATR m )
 __inline MATR MatrRotate(DBL AngleDeg, VEC v )
 {
   DBL a = D2R(AngleDeg), si = sin(a), co = cos(a);
-  MATR m;
+  MATR m = UnitMatrix;
   VEC p = VecNormalize(v);
   
   m.a[0][0] = co + p.x * p.x * (1 - co);
@@ -301,6 +301,21 @@ __inline VEC PointTransform( VEC V, MATR M )
                 (V.x * M.a[0][1] + V.y * M.a[1][1] + V.z * M.a[2][1] + M.a[3][1]) / w,
                 (V.x * M.a[0][2] + V.y * M.a[1][2] + V.z * M.a[2][2] + M.a[3][2]) / w);
 } /* End of 'PointTransform' function */
+
+/* function MatrFrustum */
+__inline MATR MatrFrustum( DBL l, DBL r, DBL b, DBL t, DBL n, DBL f )
+{
+  MATR m = MatrIdentity();
+  m.a[0][0] = 2 * n / (r - l);
+  m.a[1][1] = 2 * n / (t - b);
+  m.a[2][0] = (r + l) / (r - l);
+  m.a[2][1] = (t + b) / (t - b);
+  m.a[2][2] = -(f + n) / (f - n);
+  m.a[2][3] = -1;
+  m.a[3][2] = -2 * n * f / (f - n);
+  m.a[3][3] = 0;
+  return m;
+}/* End of 'MatrFrustum' function */
 
 #endif
 /* EOF 'VEC.H' */
