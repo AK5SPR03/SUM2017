@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "T09ANIM", "T09ANIM.vcproj", "{F907F546-E90B-492E-A0F5-C8881AC68051}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F907F546-E90B-492E-A0F5-C8881AC68051}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F907F546-E90B-492E-A0F5-C8881AC68051}.Debug|Win32.Build.0 = Debug|Win32
+		{F907F546-E90B-492E-A0F5-C8881AC68051}.Release|Win32.ActiveCfg = Release|Win32
+		{F907F546-E90B-492E-A0F5-C8881AC68051}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
