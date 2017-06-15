@@ -14,7 +14,7 @@
 typedef struct tagak5UNIT_COW
 {
   AK5_UNIT_BASE_FIELDS
-  ak5OBJ3D Cow; /* Cow model */
+  ak5PRIM Cow; /* Cow model */
   VEC pos, rot;
   INT id, angle;
 } ak5UNIT_COW;

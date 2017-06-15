@@ -20,6 +20,9 @@ MATR
   AK5_RndMatrView,  /* Viewer matrix */
   AK5_RndMatrProj;
 
+UINT
+  AK5_RndProgId;
+
 /* Rendering system initialization function.
  * ARGUMENTS: None.
  * RETURNS: None.

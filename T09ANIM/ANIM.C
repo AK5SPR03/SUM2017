@@ -69,6 +69,8 @@ BOOL AK5_AnimInit( HWND hWnd )
     return FALSE;
   }
 
+  AK5_RndProgId = AK5_RndShaderLoad("A");
+
   AK5_RndInit();
   return TRUE;
 }
@@ -92,6 +94,8 @@ VOID AK5_AnimClose( VOID )
 
   memset(&AK5_Anim, 0, sizeof(ak5ANIM));
 
+  AK5_RndShaderFree(AK5_RndProgId);
+
 }
 
 VOID AK5_AnimResize( INT w, INT h )
@@ -112,6 +116,7 @@ VOID AK5_AnimCopyFrame( VOID )
 VOID AK5_AnimRender( VOID )
 {
   INT i;
+  static DBL ShdTime;
   LARGE_INTEGER t;
   POINT pt;
 
@@ -216,6 +221,14 @@ VOID AK5_AnimRender( VOID )
         AK5_Anim.JPov = ji.dwPOV == 0xFFFF ? 0 : ji.dwPOV / 4500 + 1;
       }
     }
+  }
+
+    /*** Update shader ***/
+  if (AK5_Anim.GlobalTime - ShdTime > 2)
+  {
+    AK5_RndShaderFree(AK5_RndProgId);
+    AK5_RndProgId = AK5_RndShaderLoad("A");
+    ShdTime = AK5_Anim.GlobalTime;
   }
 
   glFinish();

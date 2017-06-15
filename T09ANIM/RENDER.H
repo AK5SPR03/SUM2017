@@ -25,6 +25,9 @@ extern MATR
   AK5_RndMatrProj,  
   AK5_RndMatrView; /* Viewer matrix */
 
+extern UINT
+  AK5_RndProgId;
+
 /* Rendering system initialization function.
  * ARGUMENTS: None.
  * RETURNS: None.
@@ -42,42 +45,77 @@ VOID AK5_RndSetProj( VOID );
  ***/
 
 /* Object description type */
-typedef struct tagak5OBJ3D
+typedef struct tagak5VERTEX
 {
-  VEC *V;      /* Vertex array */
-  INT NumOfV;  /* Vertex array size */
-  INT (*F)[3]; /* Facets array (point indices) */
-  INT NumOfF;  /* Facets array size */
-} ak5OBJ3D;
+  VEC P;
+  VEC2 T;
+  VEC N;
+  VEC4 C;
+} ak5VERTEX;
+
+typedef struct tagak5PRIM
+{
+  BOOL IsTrimesh;
+  INT NumOfI;
+  MATR M;
+  INT VA, VBuf;
+  INT IBuf;
+} ak5PRIM;
+
+typedef struct tagak5OBJ
+{
+  ak5PRIM *P;
+  INT NumOfP;
+} ak5OBJ;
 
 /* Object free memory function.
  * ARGUMENTS:
  *   - object pointer:
- *       ak5OBJ3D *Obj;
+ *       ak5OBJ *Obj;
  *   - model *.OBJ file name:
  *       CHAR *FileName;
  * RETURNS:
  *   (BOOL) TRUE if success, FALSE otherwise.
  */
-BOOL AK5_RndObjLoad( ak5OBJ3D *Obj, CHAR *FileName );
+BOOL AK5_RndPrimLoad( ak5PRIM *Obj, CHAR *FileName );
 
 /* Object free memory function.
  * ARGUMENTS:
  *   - object pointer:
- *       ak5OBJ3D *Obj;
+ *       ak5OBJ *Obj;
  * RETURNS: None.
  */
-VOID AK5_RndObjFree( ak5OBJ3D *Obj );
+VOID AK5_RndObjFree( ak5OBJ *Obj );
 
 /* Object drawing function.
  * ARGUMENTS:
  *   - object pointer:
- *       ak5OBJ3D *Obj;
+ *       ak5OBJ *Obj;
  *   - world coordinate system transform matrix:
  *       MATR M;
  * RETURNS: None.
  */
-VOID AK5_RndObjDraw( ak5OBJ3D *Obj, MATR M );
+VOID AK5_RndObjDraw( ak5OBJ *Obj, MATR M );
+
+VOID AK5_RndPrimCreate( ak5PRIM *Pr, BOOL IsTrimesh,
+                        ak5VERTEX *V, INT NumOfV,
+                        INT *I, INT NumOfI );
+
+VOID AK5_RndPrimFree( ak5PRIM *Pr );
+
+VOID AK5_RndPrimDraw( ak5PRIM *Pr, MATR M );
+
+VOID AK5_RndTriMeshEvalNormals( ak5VERTEX *V, INT NumOfV, INT *I, INT NumOfI );
+
+VOID AK5_RndGridEvalNormals( ak5VERTEX *V, INT N, INT M );
+
+VOID AK5_RndPrimCreateSphere( ak5PRIM *Pr, VEC C, FLT R, INT N, INT M );
+
+VOID AK5_RndPrimCreatePlane( ak5PRIM *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M );
+
+VOID AK5_RndShaderFree( UINT Prg );
+
+UINT AK5_RndShaderLoad( CHAR *FileNamePrefix );
 
 #endif /* __RENDER_H_ */
 

@@ -23,7 +23,7 @@
  */
 static VOID AK5_UnitInit( ak5UNIT_COW *Uni, ak5ANIM *Ani )
 {
-  AK5_RndObjLoad(&Uni->Cow, "cow.object");
+  AK5_RndPrimLoad(&Uni->Cow, "cow.object");
   srand(Ani->GlobalTime);
   Uni->pos = VecSet(rand() % 40 - 20, rand() % 20 - 10, rand() % 20 - 10);
   Uni->rot = VecSet(rand() % 5, rand() % 5, rand() % 5);
@@ -40,7 +40,7 @@ static VOID AK5_UnitInit( ak5UNIT_COW *Uni, ak5ANIM *Ani )
  */
 static VOID AK5_UnitClose( ak5UNIT_COW *Uni, ak5ANIM *Ani )
 {
-  AK5_RndObjFree(&Uni->Cow);
+  AK5_RndPrimFree(&Uni->Cow);
 } /* End of 'AK5_UnitClose' function */
 
 /* Cow drawing unit inter frame events handle function.
@@ -71,7 +71,7 @@ static VOID AK5_UnitRender( ak5UNIT_COW *Uni, ak5ANIM *Ani )
     Uni->rot = VecSet(rand() % 5, rand() % 5, rand() % 5);
   }
 
-  AK5_RndObjDraw(&Uni->Cow, MatrMulMatr(MatrRotate(Ani->Time * Uni->angle, Uni->rot), MatrTranslate(Uni->pos)));
+  AK5_RndPrimDraw(&Uni->Cow, MatrMulMatr(MatrRotate(Ani->Time * Uni->angle, Uni->rot), MatrTranslate(Uni->pos)));
 } /* End of 'AK5_UnitRender' function */
 
 /* Cow drawing unit creation function.

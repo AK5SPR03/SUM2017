@@ -17,26 +17,64 @@
 #define Degree2Radian(a) D2R(a)
 
 typedef double DBL;
+typedef float FLT;
 typedef struct tagMATR
 {
-  DBL a[4][4];
+  FLT a[4][4];
 } MATR;
 
 typedef struct tagVEC
 {
-  DBL x, y, z;
+  FLT x, y, z;
 } VEC;
 
+typedef struct tagVEC2
+{
+  FLT x, y;
+} VEC2;
 
-__inline VEC VecSet( DBL x, DBL y, DBL z )
+typedef struct tagVEC4
+{
+  FLT x, y, z, w;
+} VEC4;
+
+__inline FLT Rnd1()
+{
+  return sin(rand());
+}
+
+
+__inline VEC VecSet( FLT x, FLT y, FLT z )
 {
   VEC v = {x, y, z};
   return v;
 }
 
-__inline VEC VecSet1( DBL x )
+__inline VEC VecSet1( FLT x )
 {
   return VecSet(x, x, x);
+}
+
+__inline VEC2 Vec2Set( FLT x, FLT y )
+{
+  VEC2 v = {x, y};
+  return v;
+}
+
+__inline VEC2 Vec2Set1( FLT x )
+{
+  return Vec2Set(x, x);
+}
+
+__inline VEC4 Vec4Set( FLT x, FLT y, FLT z, FLT w )
+{
+  VEC4 v = {x, y, z, w};
+  return v;
+}
+
+__inline VEC4 Vec4Set1( FLT x )
+{
+  return Vec4Set(x, x, x, x);
 }
 
 __inline VEC VecAddVec( VEC v1, VEC v2 )
@@ -64,7 +102,7 @@ __inline VEC VecNeg( VEC v )
   return VecSet(-v.x, -v.y, -v.z );
 }
 
-__inline DBL VecDotVec( VEC v1, VEC v2 )
+__inline FLT VecDotVec( VEC v1, VEC v2 )
 {
   return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
@@ -113,6 +151,11 @@ __inline MATR MatrMulMatr( MATR m1, MATR m2 )
   return r;
 }
 
+#define MatrMulMatr3(A, B, C) \
+  (MatrMulMatr(A, MatrMulMatr(B, C)))
+#define MatrMulMatr4(A, B, C, D) \
+  (MatrMulMatr(A, MatrMulMatr3(B, C, D)))
+
 __inline MATR MatrTranspose( MATR m )
 {
   INT i, j;
@@ -124,7 +167,7 @@ __inline MATR MatrTranspose( MATR m )
   return r;
 }
 
-__inline DBL MatrDeterm3x3( DBL a11, DBL a12, DBL a13,
+__inline FLT MatrDeterm3x3( DBL a11, DBL a12, DBL a13,
                             DBL a21, DBL a22, DBL a23,
                             DBL a31, DBL a32, DBL a33)
 {
@@ -132,7 +175,7 @@ __inline DBL MatrDeterm3x3( DBL a11, DBL a12, DBL a13,
          a12 * a23 * a31 + a13 * a21 * a32 - a13 * a22 * a31;
 }
 
-__inline DBL MatrDeterm( MATR m )
+__inline FLT MatrDeterm( MATR m )
 {
   return
     m.a[0][0] * MatrDeterm3x3(m.a[1][1], m.a[1][2], m.a[1][3], 
@@ -152,7 +195,7 @@ __inline DBL MatrDeterm( MATR m )
 __inline MATR MatrInverse( MATR m )
 {
   INT i, j, p[][3] = {{1, 2, 3}, {0, 2, 3}, {0, 1, 3}, {0, 1, 2}};
-  DBL det = MatrDeterm(m);
+  FLT det = MatrDeterm(m);
   MATR r;
 
   for(i = 0; i < 4; i++)
@@ -167,9 +210,9 @@ __inline MATR MatrInverse( MATR m )
 }
 
 /* function MatrRotate */
-__inline MATR MatrRotate(DBL AngleDeg, VEC v )
+__inline MATR MatrRotate(FLT AngleDeg, VEC v )
 {
-  DBL a = D2R(AngleDeg), si = sin(a), co = cos(a);
+  FLT a = D2R(AngleDeg), si = sin(a), co = cos(a);
   MATR m = UnitMatrix;
   VEC p = VecNormalize(v);
   
@@ -212,11 +255,12 @@ __inline MATR MatrRotateZ( DBL AngleInDegree )
 {
   MATR m = UnitMatrix;
   DBL a = D2R(AngleInDegree);
+  DBL c = cos(a), s = sin(a);
 
-  m.a[0][0] = cos(a);
-  m.a[0][1] = sin(a);
-  m.a[1][0] = -sin(a);
-  m.a[1][1] = cos(a);
+  m.a[0][0] = c;
+  m.a[0][1] = s;
+  m.a[1][0] = -s;
+  m.a[1][1] = c;
   return m;
 }
 
@@ -224,11 +268,12 @@ __inline MATR MatrRotateX( DBL AngleInDegree )
 {
   MATR m = UnitMatrix;
   DBL a = D2R(AngleInDegree);
+  DBL c = cos(a), s = sin(a);
 
-  m.a[1][1] = cos(a);
-  m.a[1][2] = sin(a);
-  m.a[2][1] = -sin(a);
-  m.a[2][2] = cos(a);
+  m.a[1][1] = c;
+  m.a[1][2] = s;
+  m.a[2][1] = -s;
+  m.a[2][2] = c;
   return m;
 }
 
@@ -236,11 +281,12 @@ __inline MATR MatrRotateY( DBL AngleInDegree )
 {
   MATR m = UnitMatrix;
   DBL a = D2R(AngleInDegree);
+  DBL c = cos(a), s = sin(a);
 
-  m.a[0][0] = cos(a);
-  m.a[0][2] = -sin(a);
-  m.a[2][0] = sin(a);
-  m.a[2][2] = cos(a);
+  m.a[0][0] = c;
+  m.a[0][2] = -s;
+  m.a[2][0] = s;
+  m.a[2][2] = c;
   return m;
 }
 
@@ -303,7 +349,7 @@ __inline VEC PointTransform( VEC V, MATR M )
 } /* End of 'PointTransform' function */
 
 /* function MatrFrustum */
-__inline MATR MatrFrustum( DBL l, DBL r, DBL b, DBL t, DBL n, DBL f )
+__inline MATR MatrFrustum( FLT l, FLT r, FLT b, FLT t, FLT n, FLT f )
 {
   MATR m = MatrIdentity();
   m.a[0][0] = 2 * n / (r - l);
